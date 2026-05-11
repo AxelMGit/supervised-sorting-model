@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 #  1   age                  10000 non-null  int64  
 #  2   gender               10000 non-null  int64  
@@ -46,8 +47,24 @@ def main():
         for col in numeric_cols:
             df = df[df[col] <= 100]
 
+        # pour annuel et credit score, remplacer les valeurs manquantes par la moyenne
+        # df['annual_mileage'].fillna(df['annual_mileage'].mean(), inplace=True)
+        # df['credit_score'].fillna(df['credit_score'].mean(), inplace=True)
+
+        #  annuel et credit score, remplacer les valeurs manquantes par une valeur aléatoire entre le premier quartile et le troisième quartile
+        for col in ['annual_mileage', 'credit_score']:
+            q1 = df[col].quantile(0.25)
+            q3 = df[col].quantile(0.75)
+            df[col].fillna(df[col].apply(lambda x: np.random.uniform(q1, q3) if pd.isnull(x) else x), inplace=True)
+
 
         # Génération des multiples boîtes à moustaches
+        df.hist(
+            figsize=(18, 12))
+        
+        plt.tight_layout()
+        plt.show()
+
         df.plot(
             kind='box',         
             subplots=True,      
@@ -59,10 +76,6 @@ def main():
 
         plt.tight_layout()
         plt.show()
-
-    
-    
-        
 
     except FileNotFoundError:
         print("Erreur : Fichier non trouvé")
