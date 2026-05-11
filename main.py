@@ -12,6 +12,10 @@ def main():
         # Afficher les informations sur les variables et leurs types
         print("\n\nInformations sur les colonnes :")
         df.info()
+
+        # Detection des valeurs manquantes
+        print("\n\nNombre de valeurs manquantes par colonne :")
+        print(df.isnull().sum())
     except FileNotFoundError:
         print("Erreur : Fichier non trouvé")
 
