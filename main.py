@@ -36,6 +36,33 @@ def main():
         # Detection des valeurs manquantes
         print("\n\nNombre de valeurs manquantes par colonne :")
         print(df.isnull().sum())
+
+
+        #for every column with data type object, print all the unique values
+        for col in df.select_dtypes(include=['object']).columns:
+            print(f"\n\nValeurs uniques pour la colonne '{col}':")
+            print(df[col].unique())
+
+        # remplacer les valeur des colonnes non numérique par des valeurs numériques
+        #Valeurs uniques pour la colonne 'driving_experience':
+        # ['0-9y' '10-19y' '20-29y' '30y+']
+        # Valeurs uniques pour la colonne 'education':
+        # ['high school' 'none' 'university']
+        # Valeurs uniques pour la colonne 'income':
+        # ['upper class' 'poverty' 'working class' 'middle class']
+        # Valeurs uniques pour la colonne 'vehicle_year':
+        # ['after 2015' 'before 2015']
+        # Valeurs uniques pour la colonne 'vehicle_type':
+        # ['sedan' 'sports car']
+
+        df['driving_experience'] = df['driving_experience'].map({'0-9y': 0, '10-19y': 1, '20-29y': 2, '30y+': 3})
+        df['education'] = df['education'].map({'none': 0, 'high school': 1, 'university': 2})
+        df['income'] = df['income'].map({'poverty': 0, 'working class': 1, 'middle class': 2, 'upper class': 3})
+        df['vehicle_year'] = df['vehicle_year'].map({'before 2015': 0, 'after 2015': 1})
+        df['vehicle_type'] = df['vehicle_type'].map({'sedan': 0, 'sports car': 1})
+        
+
+
         
 
 
