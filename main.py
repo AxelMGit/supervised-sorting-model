@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
 from pandas.plotting import scatter_matrix
 
 def load_data(file_path):
@@ -65,6 +66,16 @@ def analyze_correlations(X, y):
     print(f"\nVariables prometteuses (>0.2) : {promising}")
     return promising
 
+def split_data(X, y, test_size=0.2, random_state=42):
+    """7. Extraction des jeux d'apprentissage et de test"""
+    print(f"\n--- 7. Extraction des jeux (test_size={test_size}) ---")
+    # Conversion en tableaux Numpy pour Scikit-Learn
+    X_train, X_test, y_train, y_test = train_test_split(
+        X.values, y.values, test_size=test_size, random_state=random_state
+    )
+    print(f"Échantillons : {len(X_train)} train, {len(X_test)} test")
+    return X_train, X_test, y_train, y_test
+
 def main():
     try:
         # Pipeline principal
@@ -73,8 +84,11 @@ def main():
         X, y = preprocess_data(df)
         promising_features = analyze_correlations(X, y)
         
-        # Prêt pour la partie 7...
-        print("\nPrêt pour l'étape 7 (Extraction des jeux).")
+        # 7. Split
+        X_train, X_test, y_train, y_test = split_data(X, y)
+        
+        # Prêt pour la partie 8...
+        print("\nPrêt pour l'étape 8 (Entraînement du modèle).")
         
     except Exception as e:
         print(f"Erreur : {e}")
