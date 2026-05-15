@@ -30,6 +30,22 @@ Ce projet vise à prédire si un client fera une demande d'indemnisation auprès
 *   **Méthode :** `StandardScaler`.
 *   **Justification :** Les variables ont des échelles très différentes (ex: `credit_score` entre 0 et 1 vs `annual_mileage` en milliers). La normalisation est cruciale pour que les algorithmes (comme la Régression Logistique ou les K-NN) ne donnent pas une importance disproportionnée aux variables avec de grandes valeurs numériques.
 
+## 6. Recherche de corrélations
+
+L'analyse de corrélation (Partie 6) a permis d'identifier les variables ayant le plus d'influence sur le risque de sinistre (`outcome`) :
+
+*   **Variables les plus corrélées (en valeur absolue) :**
+    1.  `driving_experience` (-0.50)
+    2.  `age` (-0.45)
+    3.  `income` (-0.42)
+    4.  `vehicle_ownership` (-0.38)
+    5.  `past_accidents` (-0.31)
+    6.  `credit_score` (-0.31)
+*   **Signification :**
+    *   Les corrélations négatives fortes (ex: `driving_experience`) indiquent que plus l'expérience de conduite ou l'âge augmente, plus la probabilité de faire une demande d'indemnisation diminue.
+    *   `vehicle_year` présente une corrélation positive (~0.29), suggérant une influence de l'âge du véhicule sur le risque.
+*   **Variables pertinentes :** Les variables avec une corrélation absolue > 0.2 ont été sélectionnées comme "prometteuses" pour l'entraînement des modèles.
+
 ## Structure du Projet
 - `main.py` : Script principal contenant le pipeline de préparation.
 - `car_insurance.csv` : Jeu de données source.

@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+from pandas.plotting import scatter_matrix
+
 
 def main():
     # --- 3. Importation des données ---
@@ -71,18 +73,42 @@ def main():
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(X)
         
-        # Conversion en DataFrame pour garder les noms de colonnes si besoin
+        # Conversion en DataFrame pour garder les noms de colonnes
         X_final = pd.DataFrame(X_scaled, columns=X.columns)
+        # On rajoute la cible pour l'analyse de corrélation
+        df_final = X_final.copy()
+        df_final['outcome'] = y.values
 
         print("\nPréparation terminée.")
         print("Nouvelle taille de X :", X_final.shape)
-        print("Aperçu de X normalisé :")
-        print(X_final.head())
+
+        # --- 6. Recherche de corrélations ---
+        print("\n--- 6. Recherche de corrélations ---")
+        
+        # Calcul de la matrice de corrélation
+        corr_matrix = df_final.corr()
+
+        # Affichage de la corrélation de chaque variable avec la sortie 'outcome'
+        print("Corrélation des variables avec 'outcome' (triée) :")
+        target_corr = corr_matrix['outcome'].sort_values(ascending=False)
+        print(target_corr)
+
+        # Identification des variables les plus prometteuses (valeur absolue > 0.2 par exemple)
+        threshold = 0.2
+        promising_features = target_corr[abs(target_corr) > threshold].index.tolist()
+        promising_features.remove('outcome')
+        print(f"\nVariables les plus prometteuses (abs(corr) > {threshold}) : {promising_features}")
+
+        # Visualisation avec scatter_matrix (sur un sous-ensemble pour la lisibilité)
+        print("\nGénération de la scatter_matrix pour les variables prometteuses...")
+        # scatter_matrix(df_final[promising_features], figsize=(12, 8), diagonal='kde')
+        # plt.tight_layout()
+        # plt.show()
 
         # Visualisation finale après préparation
         print("\nGénération des histogrammes après préparation...")
-        X_final.hist(figsize=(15, 10))
-        plt.tight_layout()
+        # X_final.hist(figsize=(15, 10))
+        # plt.tight_layout()
         # plt.show()
 
     except FileNotFoundError:
