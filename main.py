@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 from pandas.plotting import scatter_matrix
 
 def load_data(file_path):
@@ -76,6 +77,14 @@ def split_data(X, y, test_size=0.2, random_state=42):
     print(f"Échantillons : {len(X_train)} train, {len(X_test)} test")
     return X_train, X_test, y_train, y_test
 
+def train_model(X_train, y_train):
+    """8. Entraînement d'un modèle (Régression Logistique)"""
+    print("\n--- 8. Entraînement du modèle ---")
+    model = LogisticRegression(random_state=42)
+    model.fit(X_train, y_train)
+    print("Modèle entraîné avec succès.")
+    return model
+
 def main():
     try:
         # Pipeline principal
@@ -87,8 +96,11 @@ def main():
         # 7. Split
         X_train, X_test, y_train, y_test = split_data(X, y)
         
-        # Prêt pour la partie 8...
-        print("\nPrêt pour l'étape 8 (Entraînement du modèle).")
+        # 8. Train
+        model = train_model(X_train, y_train)
+        
+        # Prêt pour la partie 9...
+        print("\nPrêt pour l'étape 9 (Évaluation du modèle).")
         
     except Exception as e:
         print(f"Erreur : {e}")

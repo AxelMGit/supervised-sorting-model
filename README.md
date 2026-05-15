@@ -46,6 +46,15 @@ L'analyse de corrélation (Partie 6) a permis d'identifier les variables ayant l
     *   `vehicle_year` présente une corrélation positive (~0.29), suggérant une influence de l'âge du véhicule sur le risque.
 *   **Variables pertinentes :** Les variables avec une corrélation absolue > 0.2 ont été sélectionnées comme "prometteuses" pour l'entraînement des modèles.
 
+## 8. Entraînement du modèle (Régression Logistique)
+
+Un modèle de **Régression Logistique** a été entraîné sur le jeu d'apprentissage. Voici les réponses aux questions théoriques :
+
+*   **Hypothèse sur le logit :** On suppose que le logarithme du rapport des vraisemblances (logit) est une fonction linéaire des variables d'entrée :  
+    $log(\frac{p}{1-p}) = \beta_0 + \beta_1x_1 + ... + \beta_nx_n$
+*   **Minimisation de la fonction de coût :** L'algorithme cherche à minimiser la fonction de perte (Log-Loss / Cross-Entropy) en utilisant des techniques d'optimisation numérique comme la **Descente de Gradient** ou des solveurs plus complexes (ex: 'lbfgs', 'liblinear').
+*   **Paramètres calculés :** Pendant la phase d'apprentissage, l'algorithme calcule les **coefficients** ($\beta_i$) associés à chaque variable ainsi que l'**ordonnée à l'origine** (intercept, $\beta_0$).
+
 ## Structure du Projet
 - `main.py` : Script principal contenant le pipeline de préparation.
 - `car_insurance.csv` : Jeu de données source.
