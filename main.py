@@ -1,111 +1,109 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from pandas.plotting import scatter_matrix
 
-#  1   age                  10000 non-null  int64  
-#  2   gender               10000 non-null  int64  
-#  3   driving_experience   10000 non-null  object 
-#  4   education            10000 non-null  object 
-#  5   income               10000 non-null  object 
-#  6   credit_score         9018 non-null   float64
-#  7   vehicle_ownership    10000 non-null  float64
-#  8   vehicle_year         10000 non-null  object 
-#  9   married              10000 non-null  float64
-#  10  children             10000 non-null  float64
-#  11  postal_code          10000 non-null  int64  
-#  12  annual_mileage       9043 non-null   float64
-#  13  vehicle_type         10000 non-null  object 
-#  14  speeding_violations  10000 non-null  int64  
-#  15  duis                 10000 non-null  int64  
-#  16  past_accidents       10000 non-null  int64  
-#  17  outcome              10000 non-null  float64
+def load_data(file_path):
+    """3. Importation des données"""
+    print(f"--- 3. Importation de {file_path} ---")
+    df = pd.read_csv(file_path)
+    print(df.head())
+    return df
+
+def examine_data(df):
+    """4. Examen des données"""
+    print("\n--- 4. Examen des données ---")
+    df.info()
+    print("\nValeurs manquantes :\n", df.isnull().sum())
+    # df.hist(figsize=(15, 10))
+    # plt.show()
+
+def preprocess_data(df):
+    """5. Préparation des données"""
+    print("\n--- 5. Préparation des données ---")
+    
+    # a. Nettoyage
+    df = df.drop(columns=['id', 'postal_code'])
+    df = df[df['speeding_violations'] <= 100]
+    
+    # b. Imputation
+    for col in ['credit_score', 'annual_mileage']:
+        df[col] = df[col].fillna(df[col].median())
+    
+    # c. Encodage Qualitatif
+    df['driving_experience'] = df['driving_experience'].map({'0-9y': 0, '10-19y': 1, '20-29y': 2, '30y+': 3})
+    df['education'] = df['education'].map({'none': 0, 'high school': 1, 'university': 2})
+    df['income'] = df['income'].map({'poverty': 0, 'working class': 1, 'middle class': 2, 'upper class': 3})
+    
+    le = LabelEncoder()
+    df['vehicle_year'] = le.fit_transform(df['vehicle_year'])
+    df['vehicle_type'] = le.fit_transform(df['vehicle_type'])
+    
+    # d. Séparation X, y
+    X = df.drop(columns=['outcome'])
+    y = df['outcome'].astype(int)
+    
+    # e. Normalisation
+    scaler = StandardScaler()
+    X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+    
+    print(f"Préparation terminée. Taille : {X_scaled.shape}")
+    return X_scaled, y
+
+def analyze_correlations(X, y):
+    """6. Recherche de corrélations"""
+    print("\n--- 6. Recherche de corrélations ---")
+    df_temp = X.copy()
+    df_temp['outcome'] = y.values
+    
+    corrs = df_temp.corr()['outcome'].sort_values(ascending=False)
+    print("Corrélations avec outcome :\n", corrs)
+    
+    promising = corrs[abs(corrs) > 0.2].index.tolist()
+    promising.remove('outcome')
+    print(f"\nVariables prometteuses (>0.2) : {promising}")
+    return promising
+
+def split_data(X, y, test_size=0.2, random_state=42):
+    """7. Extraction des jeux d'apprentissage et de test"""
+    print(f"\n--- 7. Extraction des jeux (test_size={test_size}) ---")
+    # Conversion en tableaux Numpy pour Scikit-Learn
+    X_train, X_test, y_train, y_test = train_test_split(
+        X.values, y.values, test_size=test_size, random_state=random_state
+    )
+    print(f"Échantillons : {len(X_train)} train, {len(X_test)} test")
+    return X_train, X_test, y_train, y_test
+
+def train_model(X_train, y_train):
+    """8. Entraînement d'un modèle (Régression Logistique)"""
+    print("\n--- 8. Entraînement du modèle ---")
+    model = LogisticRegression(random_state=42)
+    model.fit(X_train, y_train)
+    print("Modèle entraîné avec succès.")
+    return model
 
 def main():
-    # Lire le fichier CSV dans un DataFrame pandas.
     try:
-        df = pd.read_csv('car_insurance.csv')
-
-        # Afficher les premières lignes pour vérifier que le chargement est correct
-        print("Aperçu des 5 premières lignes du DataFrame :\n")
-        print(df.head())
-
-        # Afficher les informations sur les variables et leurs types
-        print("\n\nInformations sur les colonnes :")
-        df.info()
-
-        # Detection des valeurs manquantes
-        print("\n\nNombre de valeurs manquantes par colonne :")
-        print(df.isnull().sum())
-
-
-        #for every column with data type object, print all the unique values
-        for col in df.select_dtypes(include=['object']).columns:
-            print(f"\n\nValeurs uniques pour la colonne '{col}':")
-            print(df[col].unique())
-
-        # remplacer les valeur des colonnes non numérique par des valeurs numériques
-        #Valeurs uniques pour la colonne 'driving_experience':
-        # ['0-9y' '10-19y' '20-29y' '30y+']
-        # Valeurs uniques pour la colonne 'education':
-        # ['high school' 'none' 'university']
-        # Valeurs uniques pour la colonne 'income':
-        # ['upper class' 'poverty' 'working class' 'middle class']
-        # Valeurs uniques pour la colonne 'vehicle_year':
-        # ['after 2015' 'before 2015']
-        # Valeurs uniques pour la colonne 'vehicle_type':
-        # ['sedan' 'sports car']
-
-        df['driving_experience'] = df['driving_experience'].map({'0-9y': 0, '10-19y': 1, '20-29y': 2, '30y+': 3})
-        df['education'] = df['education'].map({'none': 0, 'high school': 1, 'university': 2})
-        df['income'] = df['income'].map({'poverty': 0, 'working class': 1, 'middle class': 2, 'upper class': 3})
-        df['vehicle_year'] = df['vehicle_year'].map({'before 2015': 0, 'after 2015': 1})
-        df['vehicle_type'] = df['vehicle_type'].map({'sedan': 0, 'sports car': 1})
+        # Pipeline principal
+        df = load_data('car_insurance.csv')
+        examine_data(df)
+        X, y = preprocess_data(df)
+        promising_features = analyze_correlations(X, y)
         
-
-
+        # 7. Split
+        X_train, X_test, y_train, y_test = split_data(X, y)
         
-
-
-
-        print("\n\nGénération des histogrammes...")
-
-        # retirer speeding violation si la valeur depasse 500
-        numeric_cols = ['speeding_violations']    
-        for col in numeric_cols:
-            df = df[df[col] <= 100]
-
-        # pour annuel et credit score, remplacer les valeurs manquantes par la moyenne
-        # df['annual_mileage'].fillna(df['annual_mileage'].mean(), inplace=True)
-        # df['credit_score'].fillna(df['credit_score'].mean(), inplace=True)
-
-        #  annuel et credit score, remplacer les valeurs manquantes par une valeur aléatoire entre le premier quartile et le troisième quartile
-        for col in ['annual_mileage', 'credit_score']:
-            q1 = df[col].quantile(0.25)
-            q3 = df[col].quantile(0.75)
-            df[col].fillna(df[col].apply(lambda x: np.random.uniform(q1, q3) if pd.isnull(x) else x), inplace=True)
-
-
-        # Génération des multiples boîtes à moustaches
-        df.hist(
-            figsize=(18, 12))
+        # 8. Train
+        model = train_model(X_train, y_train)
         
-        plt.tight_layout()
-        plt.show()
-
-        df.plot(
-            kind='box',         
-            subplots=True,      
-            layout=(-1, 4),        
-            figsize=(18, 12),     
-            sharex=False,         
-            sharey=False         
-        )
-
-        plt.tight_layout()
-        plt.show()
-
-    except FileNotFoundError:
-        print("Erreur : Fichier non trouvé")
+        # Prêt pour la partie 9...
+        print("\nPrêt pour l'étape 9 (Évaluation du modèle).")
+        
+    except Exception as e:
+        print(f"Erreur : {e}")
 
 if __name__ == '__main__':
     main()
