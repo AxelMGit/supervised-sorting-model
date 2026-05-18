@@ -95,6 +95,32 @@ La faible variance (± 0.78%) démontre que le modèle est **stable** et génér
 
 > **Note sur le Data Leakage :** Dans l'implémentation actuelle, la normalisation (`StandardScaler`) est appliquée sur l'ensemble du dataset avant la CV. Pour une rigueur maximale, il serait préférable d'utiliser un `Pipeline` Scikit-Learn afin que la normalisation soit recalculée spécifiquement pour chaque pli d'entraînement, évitant ainsi toute fuite d'information.
 
+## 11. Compte-rendu : Comparaison et Optimisation Multi-Modèles
+
+Cette phase finale vise à identifier le modèle le plus performant en optimisant les hyperparamètres de chaque algorithme pour garantir une comparaison équitable.
+
+### Méthodologie (GridSearchCV)
+Pour chaque modèle, nous avons utilisé une **recherche par grille avec validation croisée (5-fold)** afin de trouver la combinaison optimale de paramètres :
+*   **Régression Logistique** : Ajustement de la force de régularisation (`C`) et du solveur.
+*   **K-Nearest Neighbors (KNN)** : Test sur le nombre de voisins (`k`), le mode de pondération et la métrique de distance (Manhattan vs Euclidienne).
+*   **Perceptron** : Optimisation du taux d'apprentissage (`alpha`) et du type de pénalité (`l1`, `l2`, `elasticnet`).
+
+### Résultats des modèles optimisés
+
+| Modèle | Meilleurs Paramètres | Accuracy (Test) | F1-Score |
+| :--- | :--- | :--- | :--- |
+| **Logistic Regression** | `C: 0.1`, `solver: 'liblinear'` | **83.89%** | **74.24%** |
+| **KNN** | `k: 21`, `metric: 'manhattan'` | **82.99%** | **72.58%** |
+| **Perceptron** | `alpha: 0.0001`, `penalty: 'l2'` | **73.29%** | **60.21%** |
+
+### Analyse et Interprétation
+1.  **Suprématie de la Régression Logistique** : Avec une accuracy de près de 84%, ce modèle reste le plus performant. Son score F1 (74.24%) montre également qu'il gère bien l'équilibre entre la détection des sinistres et la précision des alertes.
+2.  **Progression du KNN** : L'optimisation a été particulièrement bénéfique pour le KNN (passant d'environ 81% à 83%). L'utilisation de la distance de Manhattan et d'un nombre de voisins plus élevé (k=21) a permis de mieux capturer la structure des données.
+3.  **Limites du Perceptron** : Malgré l'optimisation, le Perceptron reste en retrait. Cela suggère que la frontière de décision n'est pas parfaitement linéaire ou que le modèle est trop sensible au bruit dans les données socio-économiques.
+
+### Conclusion Finale
+Le modèle retenu pour la mise en production est la **Régression Logistique optimisée**. C'est un modèle robuste, facile à interpréter pour les actuaires, et qui offre les meilleures performances prédictives sur ce jeu de données.
+
 ## Structure du Projet
 
 - `main.py` : Script principal contenant le pipeline de préparation.
