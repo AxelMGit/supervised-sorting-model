@@ -61,7 +61,7 @@ def optimiser_tous_les_modeles(X_train, y_train):
     
     configs = [
         {
-            "name": "Logistic Regression",
+            "name": "Logit",
             "model": LogisticRegression(random_state=42, max_iter=1000),
             "params": {'C': [0.1, 1, 10], 'solver': ['lbfgs', 'liblinear']}
         },
@@ -84,25 +84,60 @@ def optimiser_tous_les_modeles(X_train, y_train):
         }
     ]
     
-    results_summary = []
     best_models = {}
-    
     for config in configs:
-        print(f"Analyse de {config['name']}...")
+        print(f"Optimisation de {config['name']}...")
         grid = GridSearchCV(config['model'], config['params'], cv=5, scoring='accuracy', n_jobs=-1)
         grid.fit(X_train, y_train)
-        
         best_models[config['name']] = {
             "model": grid.best_estimator_,
             "params": grid.best_params_,
             "cv_score": grid.best_score_
         }
-        
     return best_models
+
+def generer_graphiques_comparaison(df_results):
+    """Génère et sauvegarde un graphique de comparaison des modèles"""
+    print("\n--- Génération du graphique de comparaison ---")
+    
+    # Préparation des données pour le plot
+    models = df_results['Modèle']
+    accuracy = df_results['Test Accuracy'].str.rstrip('%').astype(float)
+    f1_score = df_results['Test F1-Score'].str.rstrip('%').astype(float)
+    
+    x = np.arange(len(models))
+    width = 0.35
+    
+    fig, ax = plt.subplots(figsize=(10, 6))
+    rects1 = ax.bar(x - width/2, accuracy, width, label='Accuracy', color='#3498db')
+    rects2 = ax.bar(x + width/2, f1_score, width, label='F1-Score', color='#e74c3c')
+    
+    ax.set_ylabel('Score (%)')
+    ax.set_title('Comparaison des Performances par Modèle')
+    ax.set_xticks(x)
+    ax.set_xticklabels(models)
+    ax.legend()
+    ax.set_ylim(0, 100)
+    
+    # Ajout des étiquettes de valeur sur les barres
+    def autolabel(rects):
+        for rect in rects:
+            height = rect.get_height()
+            ax.annotate(f'{height:.1f}%',
+                        xy=(rect.get_x() + rect.get_width() / 2, height),
+                        xytext=(0, 3), 
+                        textcoords="offset points",
+                        ha='center', va='bottom')
+
+    autolabel(rects1)
+    autolabel(rects2)
+    
+    fig.tight_layout()
+    plt.savefig('comparaison_modeles.png')
+    print("Graphique sauvegardé : comparaison_modeles.png")
 
 def main():
     try:
-        # Pipeline
         df = load_data('car_insurance.csv')
         examine_data(df)
         X, y = preprocess_data(df)
@@ -112,7 +147,6 @@ def main():
             X.values, y.values, test_size=0.2, random_state=42
         )
         
-        # Optimisation
         best_configs = optimiser_tous_les_modeles(X_train, y_train)
         
         # Comparaison et affichage final
@@ -124,26 +158,25 @@ def main():
         for name, info in best_configs.items():
             model = info["model"]
             y_pred = model.predict(X_test)
-            
             acc = accuracy_score(y_test, y_pred)
             f1 = f1_score(y_test, y_pred)
             
             final_data.append({
                 "Modèle": name,
-                "Best Params": str(info["params"]),
-                "CV Accuracy": f"{info['cv_score']:.2%}",
                 "Test Accuracy": f"{acc:.2%}",
                 "Test F1-Score": f"{f1:.2%}"
             })
             
         df_results = pd.DataFrame(final_data)
-        print(df_results.to_string(index=False))
+        print("\n" + df_results.to_string(index=False))
         
-        # Conclusion
+        # Lancement de la génération du graphique
         winner_name = df_results.iloc[df_results['Test Accuracy'].str.rstrip('%').astype(float).idxmax()]['Modèle']
         print("\n" + "="*60)
         print(f"🏆 GAGNANT : {winner_name}")
         print("="*60)
+        generer_graphiques_comparaison(df_results)
+
         
     except Exception as e:
         print(f"Erreur : {e}")
