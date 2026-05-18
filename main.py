@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
 from pandas.plotting import scatter_matrix
 
 def load_data(file_path):
@@ -85,6 +86,28 @@ def train_model(X_train, y_train):
     print("Modèle entraîné avec succès.")
     return model
 
+def afficherEvaluation(model, X_test, y_test):
+    """9. Évaluation du modèle"""
+    print("\n--- 9. Évaluation du modèle ---")
+    y_pred = model.predict(X_test)
+
+    # Calcul des métriques
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred)
+    rec = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    conf_mat = confusion_matrix(y_test, y_pred)
+
+    print(f"Accuracy  : {acc:.2%}")
+    print(f"Precision : {prec:.2%}")
+    print(f"Recall    : {rec:.2%}")
+    print(f"F1 Score  : {f1:.2%}")
+
+    # Affichage plus lisible de la matrice de confusion
+    df_cm = pd.DataFrame(conf_mat, index=['Réel 0', 'Réel 1'], columns=['Prédit 0', 'Prédit 1'])
+    print("\nMatrice de confusion :\n", df_cm)
+
+
 def main():
     try:
         # Pipeline principal
@@ -98,9 +121,9 @@ def main():
         
         # 8. Train
         model = train_model(X_train, y_train)
-        
-        # Prêt pour la partie 9...
-        print("\nPrêt pour l'étape 9 (Évaluation du modèle).")
+
+        # 9. Évaluation du modèle 
+        afficherEvaluation(model, X_test, y_test)
         
     except Exception as e:
         print(f"Erreur : {e}")

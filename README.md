@@ -55,6 +55,33 @@ Un modèle de **Régression Logistique** a été entraîné sur le jeu d'apprent
 *   **Minimisation de la fonction de coût :** L'algorithme cherche à minimiser la fonction de perte (Log-Loss / Cross-Entropy) en utilisant des techniques d'optimisation numérique comme la **Descente de Gradient** ou des solveurs plus complexes (ex: 'lbfgs', 'liblinear').
 *   **Paramètres calculés :** Pendant la phase d'apprentissage, l'algorithme calcule les **coefficients** ($\beta_i$) associés à chaque variable ainsi que l'**ordonnée à l'origine** (intercept, $\beta_0$).
 
+## 9. Évaluation du modèle
+
+L'évaluation du modèle est cruciale pour comprendre ses performances réelles sur des données non vues. Nous utilisons plusieurs métriques issues de la **matrice de confusion** :
+
+### Métriques expliquées :
+1.  **Accuracy (Précision globale) :** C'est le taux de bonnes prédictions totales (Vrais Positifs + Vrais Négatifs) par rapport au nombre total d'échantillons. Elle donne une idée générale de la performance mais peut être trompeuse si les classes sont déséquilibrées.
+2.  **Precision (Précision) :** Répond à la question : "Sur tous ceux que le modèle a prédit comme 'Positif' (indemnisation), combien l'étaient réellement ?". C'est crucial pour éviter les "Faux Positifs" (prédire un sinistre là où il n'y en a pas).
+3.  **Recall (Rappel / Sensibilité) :** Répond à la question : "Sur tous ceux qui étaient réellement 'Positif', combien le modèle a-t-il réussi à en détecter ?". C'est crucial pour éviter les "Faux Négatifs" (manquer un sinistre réel).
+4.  **F1-Score :** C'est la moyenne harmonique de la Précision et du Rappel. Il permet d'avoir une mesure unique qui équilibre les deux, ce qui est particulièrement utile quand on veut un bon compromis entre détection exhaustive et fiabilité des prédictions.
+
+### Résultats du modèle actuel (Régression Logistique) :
+Suite à l'entraînement sur 80% des données, le modèle obtient les performances suivantes sur le jeu de test :
+
+| Métrique | Valeur |
+| :--- | :--- |
+| **Accuracy** | **83.94%** |
+| **Precision** | **74.88%** |
+| **Recall** | **73.57%** |
+| **F1-Score** | **74.22%** |
+
+### Matrice de Confusion :
+La matrice de confusion permet de visualiser les erreurs du modèle :
+*   **Vrais Négatifs (1216) :** Clients n'ayant pas fait de demande, bien prédits.
+*   **Vrais Positifs (462) :** Clients ayant fait une demande, bien prédits.
+*   **Faux Positifs (155) :** Clients n'ayant pas fait de demande, mais prédits comme en ayant fait une (Erreur de Type I).
+*   **Faux Negatifs (166) :** Clients ayant fait une demande, mais prédits comme n'en ayant pas fait une (Erreur de Type II).
+
 ## Structure du Projet
 - `main.py` : Script principal contenant le pipeline de préparation.
 - `car_insurance.csv` : Jeu de données source.
