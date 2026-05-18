@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Projet Science des Donnees - Classification Supervisee</title>
+  <title>Projet Science des Données - Classification Supervisée</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -325,32 +325,32 @@
     <section class="slide active" data-title="Intro">
       <div class="hero">
         <div>
-          <div class="kicker step" style="--d: 0.1s">Projet science des donnees</div>
-          <h1 class="step" style="--d: 0.2s">Classification supervisee des sinistres auto</h1>
-          <p class="step" style="--d: 0.3s">Objectif : predire la probabilite qu un client declare un sinistre a partir de 10 000 profils et 18 variables.</p>
-          <p class="step" style="--d: 0.4s">Presentation autoportee : chaque slide rappelle le contexte, les choix de donnees, et l interpretation des resultats.</p>
-          <p class="step" style="--d: 0.5s">Le projet suit un pipeline complet : exploration, nettoyage, encodage, mise a l echelle, apprentissage, evaluation.</p>
-          <div class="hint step" style="--d: 0.6s">Naviguer : fleches, espace, clic</div>
+          <div class="kicker step" style="--d: 0.1s">Projet science des données</div>
+          <h1 class="step" style="--d: 0.2s">Classification supervisée des sinistres auto</h1>
+          <p class="step" style="--d: 0.3s">Objectif : prédire la probabilité qu'un client déclare un sinistre à partir de 10 000 profils et 18 variables.</p>
+          <p class="step" style="--d: 0.4s">Présentation autoportée : chaque slide rappelle le contexte, les choix de données, et l'interprétation des résultats.</p>
+          <p class="step" style="--d: 0.5s">Le projet suit un pipeline complet : exploration, nettoyage, encodage, mise à l'échelle, apprentissage, évaluation.</p>
+          <div class="hint step" style="--d: 0.6s">Naviguer : flèches, espace, clic</div>
         </div>
         <div class="hero-card step" style="--d: 0.35s">
           <div class="badge">Assurance automobile</div>
-          <p><strong>Jeu de donnees :</strong> 10 000 clients, 18 variables (socio-eco, conduite, vehicule).</p>
+          <p><strong>Jeu de données :</strong> 10 000 clients, 18 variables (socio-éco, conduite, véhicule).</p>
           <p><strong>Variable cible :</strong> outcome (1 = sinistre, 0 = aucun)</p>
-          <p><strong>Livrables :</strong> graphiques, comparaison modeles, modele final sauvegarde.</p>
-          <p><strong>Cadre :</strong> preparation, correlations, benchmark multi-modeles.</p>
-          <p><strong>Objectif metier :</strong> mieux identifier les profils a risque pour aider la decision.</p>
+          <p><strong>Livrables :</strong> graphiques, comparaison modèles, modèle final sauvegardé.</p>
+          <p><strong>Cadre :</strong> préparation, corrélations, benchmark multi-modèles.</p>
+          <p><strong>Objectif métier :</strong> mieux identifier les profils à risque pour aider la décision.</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-title="Plan">
       <div class="kicker step" style="--d: 0.05s">Plan rapide</div>
-      <h2 class="step" style="--d: 0.1s">Du nettoyage aux resultats</h2>
-      <p class="step" style="--d: 0.15s">Chaque partie contient le rationnel des decisions et la lecture des resultats pour une comprehension sans oral.</p>
-      <p class="step" style="--d: 0.2s">Les sections sont structurees comme un mini rapport : contexte, methodes, preuves visuelles, puis choix final.</p>
+      <h2 class="step" style="--d: 0.1s">Du nettoyage aux résultats</h2>
+      <p class="step" style="--d: 0.15s">Chaque partie contient le rationnel des décisions et la lecture des résultats pour une compréhension sans oral.</p>
+      <p class="step" style="--d: 0.2s">Les sections sont structurées comme un mini rapport : contexte, méthodes, preuves visuelles, puis choix final.</p>
       <div class="grid-2">
         <div class="card step" style="--d: 0.2s">
-          <h3>1. Donnees</h3>
+          <h3>1. Données</h3>
           <ul class="list">
             <li>Nettoyage + choix de variables</li>
             <li>Gestion des valeurs manquantes</li>
@@ -361,102 +361,102 @@
           <h3>2. Analyse</h3>
           <ul class="list">
             <li>Graphiques exploratoires</li>
-            <li>Correlations clefs</li>
-            <li>Selection des features</li>
+            <li>Corrélations clefs</li>
+            <li>Sélection des features</li>
           </ul>
         </div>
         <div class="card step" style="--d: 0.4s">
-          <h3>3. Modeles</h3>
+          <h3>3. Modèles</h3>
           <ul class="list">
             <li>Logistic Regression, KNN, Perceptron</li>
-            <li>Validation croisee k=5</li>
+            <li>Validation croisée k=5</li>
             <li>Comparaison des performances</li>
           </ul>
         </div>
         <div class="card step" style="--d: 0.5s">
-          <h3>4. Resultats</h3>
+          <h3>4. Résultats</h3>
           <ul class="list">
-            <li>Metriques detaillees</li>
+            <li>Métriques détaillées</li>
             <li>Matrice de confusion</li>
-            <li>Choix final + next steps</li>
+            <li>Choix final + interprétation</li>
           </ul>
         </div>
       </div>
     </section>
 
     <section class="slide" data-title="Donnees">
-      <div class="kicker step" style="--d: 0.05s">Choix de donnees</div>
-      <h2 class="step" style="--d: 0.1s">Preparation robuste du dataset</h2>
-      <p class="step" style="--d: 0.15s">L objectif est de rendre les donnees coherentes, comparables et exploitables par des modeles statistiques.</p>
+      <div class="kicker step" style="--d: 0.05s">Choix de données</div>
+      <h2 class="step" style="--d: 0.1s">Préparation robuste du dataset</h2>
+      <p class="step" style="--d: 0.15s">L'objectif est de rendre les données cohérentes, comparables et exploitables par des modèles statistiques.</p>
       <div class="grid-2">
         <div class="card step" style="--d: 0.2s">
           <h3>Nettoyage</h3>
           <ul class="list">
             <li>Suppression des outliers : speeding_violations &gt; 100</li>
-            <li>Colonnes retirees : id, postal_code</li>
+            <li>Colonnes retirées : id, postal_code</li>
             <li>Objectif : stabiliser la distribution</li>
-            <li>Eviter un biais fort dans les distances et coefficients</li>
+            <li>Éviter un biais fort dans les distances et coefficients</li>
           </ul>
-          <p>Les valeurs aberrantes peuvent dominer les moyennes et rendre les distances non representantives.</p>
+          <p>Les valeurs aberrantes peuvent dominer les moyennes et rendre les distances non représentatives.</p>
         </div>
         <div class="card step" style="--d: 0.3s">
           <h3>Valeurs manquantes</h3>
           <ul class="list">
-            <li>credit_score, annual_mileage : imputation mediane</li>
+            <li>credit_score, annual_mileage : imputation médiane</li>
             <li>Variables qualitatives : mode si besoin</li>
-            <li>Robuste aux valeurs extremes</li>
-            <li>Limite l introduction de bruit artificiel</li>
+            <li>Robuste aux valeurs extrêmes</li>
+            <li>Limite l'introduction de bruit artificiel</li>
           </ul>
-          <p>La mediane conserve une tendance centrale stable, meme en presence d extremes.</p>
+          <p>La médiane conserve une tendance centrale stable, même en présence d'extrêmes.</p>
         </div>
         <div class="card step" style="--d: 0.4s">
           <h3>Encodage</h3>
           <ul class="list">
             <li>Ordinal : mapping manuel (education, income)</li>
             <li>Binaire : LabelEncoder (vehicle_year, vehicle_type)</li>
-            <li>Preservation de la hierarchie</li>
-            <li>Evite un ordre arbitraire sur les categories</li>
+            <li>Préservation de la hiérarchie</li>
+            <li>Évite un ordre arbitraire sur les catégories</li>
           </ul>
-          <p>Les variables ordinales gardent un sens de progression utile pour le modele.</p>
+          <p>Les variables ordinales gardent un sens de progression utile pour le modèle.</p>
         </div>
         <div class="card step" style="--d: 0.5s">
           <h3>Normalisation</h3>
           <ul class="list">
-            <li>StandardScaler pour mettre a l echelle</li>
+            <li>StandardScaler pour mettre à l'échelle</li>
             <li>Essentiel pour Logit et KNN</li>
-            <li>Centre-reduit pour une influence comparable</li>
+            <li>Centré-réduit pour une influence comparable</li>
           </ul>
-          <p>Sans mise a l echelle, les variables a grandes valeurs dominent l apprentissage.</p>
+          <p>Sans mise à l'échelle, les variables à grandes valeurs dominent l'apprentissage.</p>
         </div>
       </div>
-      <p class="step" style="--d: 0.6s">Resultat : un jeu propre, numerique, et pret pour la modelisation et la comparaison multi-modeles.</p>
+      <p class="step" style="--d: 0.6s">Résultat : un jeu propre, numérique, et prêt pour la modélisation et la comparaison multi-modèles.</p>
     </section>
 
     <section class="slide" data-title="Graphiques">
       <div class="kicker step" style="--d: 0.05s">Analyse visuelle</div>
       <h2 class="step" style="--d: 0.1s">Explorer les distributions et relations</h2>
-      <p class="step" style="--d: 0.15s">Les graphiques valident la qualite des features et orientent les choix de variables.</p>
+      <p class="step" style="--d: 0.15s">Les graphiques valident la qualité des features et orientent les choix de variables.</p>
       <div class="grid-2">
         <div class="media small step" style="--d: 0.2s">
-          <img src="histograms.png" alt="Histogrammes des variables numeriques" />
-          <div class="caption">Histogrammes : variabilite forte entre features.</div>
-          <p>Lecture : certaines distributions sont etalees ou asymetriques, d ou la normalisation.</p>
-          <p>On repere aussi des pics possibles lies aux imputations medianes.</p>
+          <img src="histograms.png" alt="Histogrammes des variables numériques" />
+          <div class="caption">Histogrammes : variabilité forte entre features.</div>
+          <p>Lecture : certaines distributions sont étalées ou asymétriques, d'où la normalisation.</p>
+          <p>On repère aussi des pics possibles liés aux imputations médianes.</p>
         </div>
         <div class="media small step" style="--d: 0.3s">
           <img src="scatter_matrix.png" alt="Scatter matrix des variables prometteuses" />
-          <div class="caption">Scatter matrix : separation visuelle autour de outcome.</div>
-          <p>Lecture : separation partielle, pas de frontiere nette, utile pour un modele probabiliste.</p>
-          <p>Les nuages se chevauchent, ce qui justifie un modele qui renvoie des probabilites.</p>
+          <div class="caption">Scatter matrix : séparation visuelle autour de outcome.</div>
+          <p>Lecture : séparation partielle, pas de frontière nette, utile pour un modèle probabiliste.</p>
+          <p>Les nuages se chevauchent, ce qui justifie un modèle qui renvoie des probabilités.</p>
         </div>
       </div>
-      <p class="step" style="--d: 0.4s">Ces graphiques servent a verifier la qualite des variables et a orienter la selection des features.</p>
+      <p class="step" style="--d: 0.4s">Ces graphiques servent à vérifier la qualité des variables et à orienter la sélection des features.</p>
     </section>
 
     <section class="slide" data-title="Correlations">
-      <div class="kicker step" style="--d: 0.05s">Signaux clefs</div>
-      <h2 class="step" style="--d: 0.1s">Variables les plus correlees a outcome</h2>
-      <p class="step" style="--d: 0.15s">Une correlation negative indique qu une variable plus elevee est associee a moins de sinistres. Ce n est pas une causalite, mais un bon signal de priorisation.</p>
+      <div class="kicker step" style="--d: 0.05s">Signaux clés</div>
+      <h2 class="step" style="--d: 0.1s">Variables les plus corrélées à outcome</h2>
+      <p class="step" style="--d: 0.15s">Une corrélation négative indique qu'une variable plus élevée est associée à moins de sinistres. Ce n'est pas une causalité, mais un bon signal de priorisation.</p>
       <div class="grid-3">
         <div class="card step" style="--d: 0.2s">
           <div class="metric">-0.50</div>
@@ -464,7 +464,7 @@
         </div>
         <div class="card step" style="--d: 0.3s">
           <div class="metric">-0.45</div>
-          <p>age : sinistralite plus faible chez les plus ages.</p>
+          <p>âge : sinistralité plus faible chez les plus âgés.</p>
         </div>
         <div class="card step" style="--d: 0.4s">
           <div class="metric">-0.42</div>
@@ -475,73 +475,73 @@
         <ul class="list">
           <li>Autres variables utiles : vehicle_ownership (-0.38), past_accidents (-0.31), credit_score (-0.31).</li>
           <li>Signal positif notable : vehicle_year (~0.29).</li>
-          <li>Selection des features : |corr| &gt; 0.2.</li>
-          <li>Ces signaux guident la selection sans remplacer l evaluation modele.</li>
+          <li>Sélection des features : |corr| &gt; 0.2.</li>
+          <li>Ces signaux guident la sélection sans remplacer l'évaluation modèle.</li>
         </ul>
-        <p>La correlation sert de filtre initial, puis le modele valide les variables utiles.</p>
+        <p>La corrélation sert de filtre initial, puis le modèle valide les variables utiles.</p>
       </div>
     </section>
 
     <section class="slide" data-title="Modeles">
       <div class="kicker step" style="--d: 0.05s">Apprentissage</div>
-      <h2 class="step" style="--d: 0.1s">Benchmark multi-modeles</h2>
-      <p class="step" style="--d: 0.15s">Trois familles complementaires : lineaire interpretable, voisinage, et perceptron pour tester une frontiere lineaire simple.</p>
+      <h2 class="step" style="--d: 0.1s">Benchmark multi-modèles</h2>
+      <p class="step" style="--d: 0.15s">Trois familles complémentaires : linéaire interprétable, voisinage, et perceptron pour tester une frontière linéaire simple.</p>
       <div class="grid-2">
         <div class="card step" style="--d: 0.2s">
-          <h3>Modeles testes</h3>
+          <h3>Modèles testés</h3>
           <ul class="list">
-            <li>Logistic Regression (baseline interpretable)</li>
+            <li>Logistic Regression (baseline interprétable)</li>
             <li>KNN (similarite)</li>
-            <li>Perceptron (lineaire)</li>
-            <li>Hyperparametres : C, k, alpha</li>
+            <li>Perceptron (linéaire)</li>
+            <li>Hyperparamètres : C, k, alpha</li>
           </ul>
-          <p>GridSearchCV teste plusieurs valeurs pour chaque modele afin d etre equitable.</p>
+          <p>GridSearchCV teste plusieurs valeurs pour chaque modèle afin d'être équitable.</p>
         </div>
         <div class="card step" style="--d: 0.3s">
           <h3>Validation robuste</h3>
           <ul class="list">
             <li>GridSearchCV + k-fold (k=5)</li>
             <li>Accuracy moyenne ~84% (±0.78)</li>
-            <li>Stabilite du modele</li>
-            <li>Split train/test a 80/20</li>
+            <li>Stabilité du modèle</li>
+            <li>Split train/test à 80/20</li>
           </ul>
-          <p>La validation croisee limite l effet du hasard sur le choix du modele.</p>
+          <p>La validation croisée limite l'effet du hasard sur le choix du modèle.</p>
         </div>
       </div>
       <div class="media medium step" style="--d: 0.4s; margin-top: 1.4rem;">
-        <img src="comparaison_modeles.png" alt="Comparaison des modeles" />
-        <div class="caption">Comparaison visuelle des performances apres optimisation.</div>
-        <p>Lecture : la regression logistique reste la meilleure, KNN proche, perceptron en retrait.</p>
+        <img src="comparaison_modeles.png" alt="Comparaison des modèles" />
+        <div class="caption">Comparaison visuelle des performances après optimisation.</div>
+        <p>Lecture : la régression logistique reste la meilleure, KNN proche, perceptron en retrait.</p>
       </div>
     </section>
 
     <section class="slide" data-title="Metriques">
-      <div class="kicker step" style="--d: 0.05s">Evaluation</div>
-      <h2 class="step" style="--d: 0.1s">Comprendre les metriques</h2>
-      <p class="step" style="--d: 0.15s">Dans un probleme de sinistre, une seule metrique ne suffit pas. Nous observons l equilibre entre detection et precision.</p>
+      <div class="kicker step" style="--d: 0.05s">Évaluation</div>
+      <h2 class="step" style="--d: 0.1s">Comprendre les métriques</h2>
+      <p class="step" style="--d: 0.15s">Dans un problème de sinistre, une seule métrique ne suffit pas. Nous observons l'équilibre entre détection et précision.</p>
       <div class="grid-2">
         <div class="card step" style="--d: 0.2s">
           <h3>Accuracy</h3>
-          <p>Part des predictions correctes sur l ensemble des clients. Utile, mais sensible au desequilibre des classes.</p>
+          <p>Part des prédictions correctes sur l'ensemble des clients. Utile, mais sensible au déséquilibre des classes.</p>
         </div>
         <div class="card step" style="--d: 0.3s">
           <h3>Precision</h3>
-          <p>Parmi les clients predits a risque, quelle proportion est vraiment en sinistre. Limite les fausses alertes.</p>
+          <p>Parmi les clients prédits à risque, quelle proportion est vraiment en sinistre. Limite les fausses alertes.</p>
         </div>
         <div class="card step" style="--d: 0.4s">
           <h3>Recall</h3>
-          <p>Parmi les clients en sinistre, quelle proportion est bien detectee. Minimise les sinistres rates.</p>
+          <p>Parmi les clients en sinistre, quelle proportion est bien détectée. Minimise les sinistres ratés.</p>
         </div>
         <div class="card step" style="--d: 0.5s">
           <h3>F1-score</h3>
-          <p>Moyenne harmonique precision/recall. Resume le compromis global dans un seul indicateur.</p>
+          <p>Moyenne harmonique précision/recall. Résume le compromis global dans un seul indicateur.</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-title="Resultats">
-      <div class="kicker step" style="--d: 0.05s">Resultats</div>
-      <h2 class="step" style="--d: 0.1s">Modele final : Logistic Regression</h2>
+      <div class="kicker step" style="--d: 0.05s">Résultats</div>
+      <h2 class="step" style="--d: 0.1s">Modèle final : Logistic Regression</h2>
       <div class="grid-3">
         <div class="card step" style="--d: 0.2s">
           <div class="metric">83.94%</div>
@@ -556,16 +556,16 @@
           <p>Solver liblinear</p>
         </div>
       </div>
-      <p class="step" style="--d: 0.45s">Le F1-score autour de 74% indique un bon compromis entre detection des sinistres et limitation des fausses alertes.</p>
-      <p class="step" style="--d: 0.5s">Le modele reste interpretable : chaque coefficient indique une influence directionnelle sur le risque.</p>
+      <p class="step" style="--d: 0.45s">Le F1-score autour de 74% indique un bon compromis entre détection des sinistres et limitation des fausses alertes.</p>
+      <p class="step" style="--d: 0.5s">Le modèle reste interprétable : chaque coefficient indique une influence directionnelle sur le risque.</p>
       <div class="card step" style="--d: 0.5s; margin-top: 1.3rem;">
         <div class="grid-3">
           <div>
-            <strong>Precision</strong>
+            <strong>Précision</strong>
             <div>74.88%</div>
           </div>
           <div>
-            <strong>Recall</strong>
+            <strong>Rappel</strong>
             <div>73.57%</div>
           </div>
           <div>
@@ -579,26 +579,26 @@
     <section class="slide" data-title="Matrice">
       <div class="kicker step" style="--d: 0.05s">Performance</div>
       <h2 class="step" style="--d: 0.1s">Matrice de confusion</h2>
-      <p class="step" style="--d: 0.15s">La matrice explique les erreurs du modele et leur impact metier.</p>
+      <p class="step" style="--d: 0.15s">La matrice explique les erreurs du modèle et leur impact métier.</p>
       <div class="grid-2">
         <div class="card step" style="--d: 0.2s">
-          <h3>Repartition</h3>
+          <h3>Répartition</h3>
           <ul class="list">
-            <li>Vrais negatifs : 1216</li>
+            <li>Vrais négatifs : 1216</li>
             <li>Vrais positifs : 462</li>
             <li>Faux positifs : 155</li>
-            <li>Faux negatifs : 166</li>
+            <li>Faux négatifs : 166</li>
           </ul>
-          <p>Les faux negatifs representent des sinistres manques, a surveiller selon le risque metier.</p>
+          <p>Les faux négatifs représentent des sinistres manqués, à surveiller selon le risque métier.</p>
         </div>
         <div class="card step" style="--d: 0.3s">
-          <h3>Lecture metier</h3>
+          <h3>Lecture métier</h3>
           <ul class="list">
-            <li>Equilibre entre detection et precision</li>
+            <li>Équilibre entre détection et précision</li>
             <li>Risque business limite sur les faux positifs</li>
-            <li>Model interpretable pour les actuaires</li>
+            <li>Modèle interprétable pour les actuaires</li>
           </ul>
-          <p>Le seuil de decision pourrait etre ajuste si l on souhaite plus de rappel.</p>
+          <p>Le seuil de décision pourrait être ajusté si l'on souhaite plus de rappel.</p>
         </div>
       </div>
     </section>
@@ -606,12 +606,12 @@
 
     <section class="slide" data-title="Conclusion">
       <div class="kicker step" style="--d: 0.05s">Conclusion</div>
-      <h2 class="step" style="--d: 0.1s">Decision finale</h2>
+      <h2 class="step" style="--d: 0.1s">Décision finale</h2>
       <div class="grid-2">
         <div class="card step" style="--d: 0.2s">
-          <h3>Modele retenu</h3>
-          <p>Logistic Regression optimisee pour une decision claire et interpretable.</p>
-          <p>Le modele se comprend facilement et peut etre explique aux equipes metier.</p>
+          <h3>Modèle retenu</h3>
+          <p>Logistic Regression optimisée pour une décision claire et interprétable.</p>
+          <p>Le modèle se comprend facilement et peut être expliqué aux équipes métier.</p>
           <p>Il offre un bon compromis performance / transparence.</p>
         </div>
       </div>
