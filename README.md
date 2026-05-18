@@ -82,7 +82,21 @@ La matrice de confusion permet de visualiser les erreurs du modèle :
 *   **Faux Positifs (155) :** Clients n'ayant pas fait de demande, mais prédits comme en ayant fait une (Erreur de Type I).
 *   **Faux Negatifs (166) :** Clients ayant fait une demande, mais prédits comme n'en ayant pas fait une (Erreur de Type II).
 
+## 10. Validation Croisée (Cross-validation)
+
+Pour garantir que la performance du modèle n'est pas due au hasard du découpage (split), nous avons réalisé une **validation croisée à 5 plis (k-fold CV)**.
+
+### Résultats :
+*   **Scores par pli :** [84.24%, 84.99%, 82.99%, 84.89%, 83.49%]
+*   **Score moyen : 84.12% ± 0.78%**
+
+### Analyse technique :
+La faible variance (± 0.78%) démontre que le modèle est **stable** et généralise bien sur différentes parties du jeu de données. Le score moyen est très proche de l'Accuracy obtenue sur le jeu de test (83.94%), ce qui confirme la solidité de l'évaluation initiale.
+
+> **Note sur le Data Leakage :** Dans l'implémentation actuelle, la normalisation (`StandardScaler`) est appliquée sur l'ensemble du dataset avant la CV. Pour une rigueur maximale, il serait préférable d'utiliser un `Pipeline` Scikit-Learn afin que la normalisation soit recalculée spécifiquement pour chaque pli d'entraînement, évitant ainsi toute fuite d'information.
+
 ## Structure du Projet
+
 - `main.py` : Script principal contenant le pipeline de préparation.
 - `car_insurance.csv` : Jeu de données source.
 - `instructions.pdf` : Cahier des charges du projet.

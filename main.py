@@ -2,9 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
+from sklearn.model_selection import cross_val_score
+
 from pandas.plotting import scatter_matrix
 
 def load_data(file_path):
@@ -108,6 +110,14 @@ def afficherEvaluation(model, X_test, y_test):
     print("\nMatrice de confusion :\n", df_cm)
 
 
+def afficherCrossValidation(model, X, y, cv=5):
+    """10. Cross-validation"""
+    print(f"\n--- 10. Cross-validation (cv={cv}) ---")
+    scores = cross_val_score(model, X.values, y.values, cv=cv)
+    print(f"Scores CV : {scores}")
+    print(f"Score moyen : {scores.mean():.2%} ± {scores.std():.2%}")
+
+
 def main():
     try:
         # Pipeline principal
@@ -124,6 +134,9 @@ def main():
 
         # 9. Évaluation du modèle 
         afficherEvaluation(model, X_test, y_test)
+
+        # 10. cross-validation
+        afficherCrossValidation(model, X, y)
         
     except Exception as e:
         print(f"Erreur : {e}")
