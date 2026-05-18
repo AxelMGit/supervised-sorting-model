@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projet Science des Donnees - Classification Supervisee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-1: #f6efe5;
+      --bg-2: #d9efe8;
+      --bg-3: #ffe8cc;
+      --ink: #102a2e;
+      --muted: #3f5f63;
+      --accent: #0f7a6a;
+      --accent-2: #ff7a3d;
+      --card: rgba(255, 255, 255, 0.82);
+      --shadow: 0 20px 45px rgba(10, 30, 35, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      color: var(--ink);
+      background: radial-gradient(1200px 600px at 10% 10%, var(--bg-2), transparent 70%),
+        radial-gradient(800px 500px at 90% 10%, var(--bg-3), transparent 60%),
+        linear-gradient(120deg, var(--bg-1), #ffffff 40%, #fef7ef 70%);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      padding: 4vh 6vw 7vh;
+    }
+
+    .bg-shape {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(0.5px);
+      opacity: 0.65;
+      z-index: 0;
+    }
+
+    .bg-shape.one {
+      width: 320px;
+      height: 320px;
+      background: rgba(15, 122, 106, 0.18);
+      top: -120px;
+      left: -80px;
+    }
+
+    .bg-shape.two {
+      width: 240px;
+      height: 240px;
+      background: rgba(255, 122, 61, 0.2);
+      bottom: -90px;
+      right: -70px;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 4vh 6vw 7vh;
+      opacity: 0;
+      transform: translateX(60px) scale(0.98);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .slide.prev {
+      opacity: 0;
+      transform: translateX(-60px) scale(0.98);
+      z-index: 1;
+    }
+
+    .kicker {
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 0.6rem;
+      font-family: "DM Serif Display", serif;
+      font-weight: 400;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
+    }
+
+    h2 {
+      font-size: clamp(2.1rem, 4vw, 3.2rem);
+    }
+
+    h3 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+    }
+
+    p {
+      margin: 0.3rem 0 0.8rem;
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(280px, 1.1fr) minmax(220px, 0.9fr);
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .hero-card {
+      background: var(--card);
+      border-radius: 26px;
+      padding: 1.8rem 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(15, 122, 106, 0.14);
+      color: var(--accent);
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.6rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.4rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 1.2rem 1.4rem;
+      box-shadow: var(--shadow);
+    }
+
+    .metric {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--accent-2);
+    }
+
+    .list {
+      margin: 0.5rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    }
+
+    .list li {
+      margin-bottom: 0.4rem;
+    }
+
+    .slide img {
+      width: 100%;
+      border-radius: 18px;
+      box-shadow: 0 16px 36px rgba(10, 30, 35, 0.18);
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .media {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .media img {
+      max-height: 38vh;
+      padding: 0.35rem;
+    }
+
+    .media.small img {
+      max-height: 34vh;
+    }
+
+    .media.medium img {
+      max-height: 40vh;
+    }
+
+    .media.large img {
+      max-height: 46vh;
+    }
+
+    .caption {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    .step {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+
+    .slide.active .step {
+      animation: rise 0.6s ease forwards;
+      animation-delay: var(--d);
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .progress {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 6px;
+      width: 100%;
+      background: rgba(16, 42, 46, 0.08);
+      z-index: 5;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .controls {
+      position: absolute;
+      right: 4vw;
+      bottom: 4vh;
+      display: flex;
+      gap: 0.6rem;
+      z-index: 6;
+    }
+
+    .controls button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.5rem 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      background: rgba(16, 42, 46, 0.08);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .controls button:hover {
+      background: rgba(16, 42, 46, 0.16);
+    }
+
+    .counter {
+      position: absolute;
+      left: 4vw;
+      bottom: 4vh;
+      font-weight: 600;
+      color: var(--muted);
+      z-index: 6;
+    }
+
+    .hint {
+      margin-top: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .hero, .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .deck, .slide {
+        padding: 4vh 7vw 7vh;
+      }
+
+      .controls {
+        right: 7vw;
+      }
+
+      .counter {
+        left: 7vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <div class="bg-shape one"></div>
+    <div class="bg-shape two"></div>
+
+    <section class="slide active" data-title="Intro">
+      <div class="hero">
+        <div>
+          <div class="kicker step" style="--d: 0.1s">Projet science des donnees</div>
+          <h1 class="step" style="--d: 0.2s">Classification supervisee des sinistres auto</h1>
+          <p class="step" style="--d: 0.3s">Objectif : predire la probabilite qu un client declare un sinistre a partir de 10 000 profils et 18 variables.</p>
+          <p class="step" style="--d: 0.4s">Presentation autoportee : chaque slide rappelle le contexte, les choix de donnees, et l interpretation des resultats.</p>
+          <p class="step" style="--d: 0.5s">Le projet suit un pipeline complet : exploration, nettoyage, encodage, mise a l echelle, apprentissage, evaluation.</p>
+          <div class="hint step" style="--d: 0.6s">Naviguer : fleches, espace, clic</div>
+        </div>
+        <div class="hero-card step" style="--d: 0.35s">
+          <div class="badge">Assurance automobile</div>
+          <p><strong>Jeu de donnees :</strong> 10 000 clients, 18 variables (socio-eco, conduite, vehicule).</p>
+          <p><strong>Variable cible :</strong> outcome (1 = sinistre, 0 = aucun)</p>
+          <p><strong>Livrables :</strong> graphiques, comparaison modeles, modele final sauvegarde.</p>
+          <p><strong>Cadre :</strong> preparation, correlations, benchmark multi-modeles.</p>
+          <p><strong>Objectif metier :</strong> mieux identifier les profils a risque pour aider la decision.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Plan">
+      <div class="kicker step" style="--d: 0.05s">Plan rapide</div>
+      <h2 class="step" style="--d: 0.1s">Du nettoyage aux resultats</h2>
+      <p class="step" style="--d: 0.15s">Chaque partie contient le rationnel des decisions et la lecture des resultats pour une comprehension sans oral.</p>
+      <p class="step" style="--d: 0.2s">Les sections sont structurees comme un mini rapport : contexte, methodes, preuves visuelles, puis choix final.</p>
+      <div class="grid-2">
+        <div class="card step" style="--d: 0.2s">
+          <h3>1. Donnees</h3>
+          <ul class="list">
+            <li>Nettoyage + choix de variables</li>
+            <li>Gestion des valeurs manquantes</li>
+            <li>Encodage + normalisation</li>
+          </ul>
+        </div>
+        <div class="card step" style="--d: 0.3s">
+          <h3>2. Analyse</h3>
+          <ul class="list">
+            <li>Graphiques exploratoires</li>
+            <li>Correlations clefs</li>
+            <li>Selection des features</li>
+          </ul>
+        </div>
+        <div class="card step" style="--d: 0.4s">
+          <h3>3. Modeles</h3>
+          <ul class="list">
+            <li>Logistic Regression, KNN, Perceptron</li>
+            <li>Validation croisee k=5</li>
+            <li>Comparaison des performances</li>
+          </ul>
+        </div>
+        <div class="card step" style="--d: 0.5s">
+          <h3>4. Resultats</h3>
+          <ul class="list">
+            <li>Metriques detaillees</li>
+            <li>Matrice de confusion</li>
+            <li>Choix final + next steps</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Donnees">
+      <div class="kicker step" style="--d: 0.05s">Choix de donnees</div>
+      <h2 class="step" style="--d: 0.1s">Preparation robuste du dataset</h2>
+      <p class="step" style="--d: 0.15s">L objectif est de rendre les donnees coherentes, comparables et exploitables par des modeles statistiques.</p>
+      <div class="grid-2">
+        <div class="card step" style="--d: 0.2s">
+          <h3>Nettoyage</h3>
+          <ul class="list">
+            <li>Suppression des outliers : speeding_violations &gt; 100</li>
+            <li>Colonnes retirees : id, postal_code</li>
+            <li>Objectif : stabiliser la distribution</li>
+            <li>Eviter un biais fort dans les distances et coefficients</li>
+          </ul>
+          <p>Les valeurs aberrantes peuvent dominer les moyennes et rendre les distances non representantives.</p>
+        </div>
+        <div class="card step" style="--d: 0.3s">
+          <h3>Valeurs manquantes</h3>
+          <ul class="list">
+            <li>credit_score, annual_mileage : imputation mediane</li>
+            <li>Variables qualitatives : mode si besoin</li>
+            <li>Robuste aux valeurs extremes</li>
+            <li>Limite l introduction de bruit artificiel</li>
+          </ul>
+          <p>La mediane conserve une tendance centrale stable, meme en presence d extremes.</p>
+        </div>
+        <div class="card step" style="--d: 0.4s">
+          <h3>Encodage</h3>
+          <ul class="list">
+            <li>Ordinal : mapping manuel (education, income)</li>
+            <li>Binaire : LabelEncoder (vehicle_year, vehicle_type)</li>
+            <li>Preservation de la hierarchie</li>
+            <li>Evite un ordre arbitraire sur les categories</li>
+          </ul>
+          <p>Les variables ordinales gardent un sens de progression utile pour le modele.</p>
+        </div>
+        <div class="card step" style="--d: 0.5s">
+          <h3>Normalisation</h3>
+          <ul class="list">
+            <li>StandardScaler pour mettre a l echelle</li>
+            <li>Essentiel pour Logit et KNN</li>
+            <li>Centre-reduit pour une influence comparable</li>
+          </ul>
+          <p>Sans mise a l echelle, les variables a grandes valeurs dominent l apprentissage.</p>
+        </div>
+      </div>
+      <p class="step" style="--d: 0.6s">Resultat : un jeu propre, numerique, et pret pour la modelisation et la comparaison multi-modeles.</p>
+    </section>
+
+    <section class="slide" data-title="Graphiques">
+      <div class="kicker step" style="--d: 0.05s">Analyse visuelle</div>
+      <h2 class="step" style="--d: 0.1s">Explorer les distributions et relations</h2>
+      <p class="step" style="--d: 0.15s">Les graphiques valident la qualite des features et orientent les choix de variables.</p>
+      <div class="grid-2">
+        <div class="media small step" style="--d: 0.2s">
+          <img src="histograms.png" alt="Histogrammes des variables numeriques" />
+          <div class="caption">Histogrammes : variabilite forte entre features.</div>
+          <p>Lecture : certaines distributions sont etalees ou asymetriques, d ou la normalisation.</p>
+          <p>On repere aussi des pics possibles lies aux imputations medianes.</p>
+        </div>
+        <div class="media small step" style="--d: 0.3s">
+          <img src="scatter_matrix.png" alt="Scatter matrix des variables prometteuses" />
+          <div class="caption">Scatter matrix : separation visuelle autour de outcome.</div>
+          <p>Lecture : separation partielle, pas de frontiere nette, utile pour un modele probabiliste.</p>
+          <p>Les nuages se chevauchent, ce qui justifie un modele qui renvoie des probabilites.</p>
+        </div>
+      </div>
+      <p class="step" style="--d: 0.4s">Ces graphiques servent a verifier la qualite des variables et a orienter la selection des features.</p>
+    </section>
+
+    <section class="slide" data-title="Correlations">
+      <div class="kicker step" style="--d: 0.05s">Signaux clefs</div>
+      <h2 class="step" style="--d: 0.1s">Variables les plus correlees a outcome</h2>
+      <p class="step" style="--d: 0.15s">Une correlation negative indique qu une variable plus elevee est associee a moins de sinistres. Ce n est pas une causalite, mais un bon signal de priorisation.</p>
+      <div class="grid-3">
+        <div class="card step" style="--d: 0.2s">
+          <div class="metric">-0.50</div>
+          <p>driving_experience : facteur protecteur principal.</p>
+        </div>
+        <div class="card step" style="--d: 0.3s">
+          <div class="metric">-0.45</div>
+          <p>age : sinistralite plus faible chez les plus ages.</p>
+        </div>
+        <div class="card step" style="--d: 0.4s">
+          <div class="metric">-0.42</div>
+          <p>income : plus de revenus, moins de sinistres.</p>
+        </div>
+      </div>
+      <div class="card step" style="--d: 0.5s; margin-top: 1.2rem;">
+        <ul class="list">
+          <li>Autres variables utiles : vehicle_ownership (-0.38), past_accidents (-0.31), credit_score (-0.31).</li>
+          <li>Signal positif notable : vehicle_year (~0.29).</li>
+          <li>Selection des features : |corr| &gt; 0.2.</li>
+          <li>Ces signaux guident la selection sans remplacer l evaluation modele.</li>
+        </ul>
+        <p>La correlation sert de filtre initial, puis le modele valide les variables utiles.</p>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Modeles">
+      <div class="kicker step" style="--d: 0.05s">Apprentissage</div>
+      <h2 class="step" style="--d: 0.1s">Benchmark multi-modeles</h2>
+      <p class="step" style="--d: 0.15s">Trois familles complementaires : lineaire interpretable, voisinage, et perceptron pour tester une frontiere lineaire simple.</p>
+      <div class="grid-2">
+        <div class="card step" style="--d: 0.2s">
+          <h3>Modeles testes</h3>
+          <ul class="list">
+            <li>Logistic Regression (baseline interpretable)</li>
+            <li>KNN (similarite)</li>
+            <li>Perceptron (lineaire)</li>
+            <li>Hyperparametres : C, k, alpha</li>
+          </ul>
+          <p>GridSearchCV teste plusieurs valeurs pour chaque modele afin d etre equitable.</p>
+        </div>
+        <div class="card step" style="--d: 0.3s">
+          <h3>Validation robuste</h3>
+          <ul class="list">
+            <li>GridSearchCV + k-fold (k=5)</li>
+            <li>Accuracy moyenne ~84% (±0.78)</li>
+            <li>Stabilite du modele</li>
+            <li>Split train/test a 80/20</li>
+          </ul>
+          <p>La validation croisee limite l effet du hasard sur le choix du modele.</p>
+        </div>
+      </div>
+      <div class="media medium step" style="--d: 0.4s; margin-top: 1.4rem;">
+        <img src="comparaison_modeles.png" alt="Comparaison des modeles" />
+        <div class="caption">Comparaison visuelle des performances apres optimisation.</div>
+        <p>Lecture : la regression logistique reste la meilleure, KNN proche, perceptron en retrait.</p>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Metriques">
+      <div class="kicker step" style="--d: 0.05s">Evaluation</div>
+      <h2 class="step" style="--d: 0.1s">Comprendre les metriques</h2>
+      <p class="step" style="--d: 0.15s">Dans un probleme de sinistre, une seule metrique ne suffit pas. Nous observons l equilibre entre detection et precision.</p>
+      <div class="grid-2">
+        <div class="card step" style="--d: 0.2s">
+          <h3>Accuracy</h3>
+          <p>Part des predictions correctes sur l ensemble des clients. Utile, mais sensible au desequilibre des classes.</p>
+        </div>
+        <div class="card step" style="--d: 0.3s">
+          <h3>Precision</h3>
+          <p>Parmi les clients predits a risque, quelle proportion est vraiment en sinistre. Limite les fausses alertes.</p>
+        </div>
+        <div class="card step" style="--d: 0.4s">
+          <h3>Recall</h3>
+          <p>Parmi les clients en sinistre, quelle proportion est bien detectee. Minimise les sinistres rates.</p>
+        </div>
+        <div class="card step" style="--d: 0.5s">
+          <h3>F1-score</h3>
+          <p>Moyenne harmonique precision/recall. Resume le compromis global dans un seul indicateur.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Resultats">
+      <div class="kicker step" style="--d: 0.05s">Resultats</div>
+      <h2 class="step" style="--d: 0.1s">Modele final : Logistic Regression</h2>
+      <div class="grid-3">
+        <div class="card step" style="--d: 0.2s">
+          <div class="metric">83.94%</div>
+          <p>Accuracy test</p>
+        </div>
+        <div class="card step" style="--d: 0.3s">
+          <div class="metric">74.22%</div>
+          <p>F1-score</p>
+        </div>
+        <div class="card step" style="--d: 0.4s">
+          <div class="metric">C = 0.1</div>
+          <p>Solver liblinear</p>
+        </div>
+      </div>
+      <p class="step" style="--d: 0.45s">Le F1-score autour de 74% indique un bon compromis entre detection des sinistres et limitation des fausses alertes.</p>
+      <p class="step" style="--d: 0.5s">Le modele reste interpretable : chaque coefficient indique une influence directionnelle sur le risque.</p>
+      <div class="card step" style="--d: 0.5s; margin-top: 1.3rem;">
+        <div class="grid-3">
+          <div>
+            <strong>Precision</strong>
+            <div>74.88%</div>
+          </div>
+          <div>
+            <strong>Recall</strong>
+            <div>73.57%</div>
+          </div>
+          <div>
+            <strong>F1</strong>
+            <div>74.22%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Matrice">
+      <div class="kicker step" style="--d: 0.05s">Performance</div>
+      <h2 class="step" style="--d: 0.1s">Matrice de confusion</h2>
+      <p class="step" style="--d: 0.15s">La matrice explique les erreurs du modele et leur impact metier.</p>
+      <div class="grid-2">
+        <div class="card step" style="--d: 0.2s">
+          <h3>Repartition</h3>
+          <ul class="list">
+            <li>Vrais negatifs : 1216</li>
+            <li>Vrais positifs : 462</li>
+            <li>Faux positifs : 155</li>
+            <li>Faux negatifs : 166</li>
+          </ul>
+          <p>Les faux negatifs representent des sinistres manques, a surveiller selon le risque metier.</p>
+        </div>
+        <div class="card step" style="--d: 0.3s">
+          <h3>Lecture metier</h3>
+          <ul class="list">
+            <li>Equilibre entre detection et precision</li>
+            <li>Risque business limite sur les faux positifs</li>
+            <li>Model interpretable pour les actuaires</li>
+          </ul>
+          <p>Le seuil de decision pourrait etre ajuste si l on souhaite plus de rappel.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="slide" data-title="Conclusion">
+      <div class="kicker step" style="--d: 0.05s">Conclusion</div>
+      <h2 class="step" style="--d: 0.1s">Decision finale</h2>
+      <div class="grid-2">
+        <div class="card step" style="--d: 0.2s">
+          <h3>Modele retenu</h3>
+          <p>Logistic Regression optimisee pour une decision claire et interpretable.</p>
+          <p>Le modele se comprend facilement et peut etre explique aux equipes metier.</p>
+          <p>Il offre un bon compromis performance / transparence.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <div class="progress"><span id="progress"></span></div>
+    <div class="counter" id="counter">1 / 10</div>
+    <div class="controls">
+      <button id="prev" aria-label="Slide precedente">Prev</button>
+      <button id="next" aria-label="Slide suivante">Next</button>
+    </div>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const progress = document.getElementById('progress');
+    const counter = document.getElementById('counter');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    let index = 0;
+
+    function updateSlides(newIndex) {
+      index = (newIndex + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active', 'prev');
+        if (i === index) slide.classList.add('active');
+        if (i === (index - 1 + slides.length) % slides.length) slide.classList.add('prev');
+      });
+      const percent = ((index + 1) / slides.length) * 100;
+      progress.style.width = `${percent}%`;
+      counter.textContent = `${index + 1} / ${slides.length}`;
+    }
+
+    function goNext() { updateSlides(index + 1); }
+    function goPrev() { updateSlides(index - 1); }
+
+    nextBtn.addEventListener('click', goNext);
+    prevBtn.addEventListener('click', goPrev);
+
+    document.addEventListener('keydown', (event) => {
+      if (['ArrowRight', 'PageDown', ' '].includes(event.key)) goNext();
+      if (['ArrowLeft', 'PageUp'].includes(event.key)) goPrev();
+    });
+
+    document.addEventListener('click', (event) => {
+      const isControl = event.target.closest('.controls');
+      if (!isControl) goNext();
+    });
+
+    updateSlides(0);
+  </script>
+</body>
+</html>
