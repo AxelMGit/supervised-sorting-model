@@ -1,3 +1,6 @@
+Par Axel Morillion et Roget Benjamin
+
+
 # Projet Science des Données : Classification Supervisée
 
 Ce projet vise à prédire si un client fera une demande d'indemnisation auprès de son assurance automobile (`outcome`) en utilisant un jeu de données de 10 000 entrées.
